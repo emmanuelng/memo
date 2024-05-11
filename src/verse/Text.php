@@ -73,7 +73,7 @@ class Text implements JsonSerializable
         $remaining = substr($string, strlen($word));
         $word = trim($word);
 
-        return array_merge($word ? [$word] : [], Text::tokenize($remaining));
+        return array_merge($word ? [new Word($word)] : [], Text::tokenize($remaining));
     }
 
     /**
