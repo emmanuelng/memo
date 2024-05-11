@@ -2,6 +2,7 @@
 
 namespace Memo\Verse;
 
+use Error;
 use JsonSerializable;
 
 /**
@@ -9,6 +10,21 @@ use JsonSerializable;
  */
 class Verse implements JsonSerializable
 {
+    /**
+     * Builds a verse with JSON data.
+     *
+     * @param mixed $data The data.
+     * @return Verse A new verse. If the data is invalid, throws an error.
+     */
+    public static function jsonDeserialize($data): Verse
+    {
+        try {
+            return new Verse($data->text, $data->reference, $data->topic);
+        } catch (Error $e) {
+            throw new Error("Invalid verse: " . $e->getMessage());
+        }
+    }
+
     /**
      * Text of the verse.
      *
