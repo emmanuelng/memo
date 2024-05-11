@@ -12,9 +12,9 @@ class Verse implements JsonSerializable
     /**
      * Text of the verse.
      *
-     * @var string
+     * @var Text
      */
-    private string $text;
+    private Text $text;
 
     /**
      * Reference of the verse.
@@ -39,7 +39,7 @@ class Verse implements JsonSerializable
      */
     function __construct(string $text, string $reference, string $topic)
     {
-        $this->text = $text;
+        $this->text = new Text($text);
         $this->reference = new Reference($reference);
         $this->topic = $topic;
     }
