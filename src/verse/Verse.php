@@ -11,16 +11,22 @@ class Verse implements JsonSerializable
 {
     /**
      * Text of the verse.
+     *
+     * @var string
      */
     private string $text;
 
     /**
      * Reference of the verse.
+     *
+     * @var Reference
      */
     private Reference $reference;
 
     /**
      * Topic of the verse.
+     *
+     * @var string
      */
     private string $topic;
 

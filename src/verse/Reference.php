@@ -12,26 +12,36 @@ class Reference implements JsonSerializable
 {
     /**
      * The book.
+     *
+     * @var string
      */
     private string $book = "";
 
     /**
      * First chapter.
+     *
+     * @var int
      */
     private int $firstChapter = 0;
 
     /**
      * First verse.
+     *
+     * @var int
      */
     private int $firstVerse = 0;
 
     /**
      * Last chapter.
+     *
+     * @var integer|null
      */
     private ?int $lastChapter = null;
 
     /**
      * Last verse.
+     *
+     * @var integer|null
      */
     private ?int $lastVerse = null;
 
