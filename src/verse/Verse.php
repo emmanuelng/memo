@@ -2,10 +2,12 @@
 
 namespace Memo\Verse;
 
+use JsonSerializable;
+
 /**
  * Represents a verse of the Bible.
  */
-class Verse
+class Verse implements JsonSerializable
 {
     /**
      * Text of the verse.
@@ -27,6 +29,15 @@ class Verse
         $this->text = $text;
         $this->reference = $reference;
         $this->topic = $topic;
+    }
+
+    function jsonSerialize()
+    {
+        return [
+            "text" => $this->text,
+            "reference" => $this->reference,
+            "topic" => $this->topic
+        ];
     }
 
     /**
