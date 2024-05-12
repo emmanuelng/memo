@@ -1,3 +1,5 @@
 RewriteEngine on
-RewriteRule ^$ src/ [L]
-RewriteRule (.*) src/$1 [L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^$ client/build [L]
+RewriteRule (.*) client/build/$1 [L]
