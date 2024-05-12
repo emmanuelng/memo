@@ -52,10 +52,11 @@ class Text implements JsonSerializable
     /**
      * Tokenizes a string, i.e. separates it in words.
      *
-     * @param string $string The string to tokenize.
+     * @param string $string   The string to tokenize.
+     * @param int    $index    Index of the next word in the verse.
      * @return array An array of strings representing the words of the string.
      */
-    private static function tokenize(string $string): array
+    private static function tokenize(string $string, int $index = 0): array
     {
         if (empty($string)) {
             return [];
@@ -73,7 +74,14 @@ class Text implements JsonSerializable
         $remaining = substr($string, strlen($word));
         $word = trim($word);
 
-        return array_merge($word ? [new Word($word)] : [], Text::tokenize($remaining));
+        if (!$word) {
+            return Text::tokenize($remaining, $index);
+        }
+
+        return array_merge(
+            [new Word($word, $index)],
+            Text::tokenize($remaining, $index + 1)
+        );
     }
 
     /**
@@ -95,7 +103,8 @@ class Text implements JsonSerializable
             $nextChar === ';' ||
             $nextChar === '.' ||
             $nextChar === '!' ||
-            $nextChar === '?'  
+            $nextChar === '?' ||
+            $nextChar === '-'
         );
     }
 }
