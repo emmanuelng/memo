@@ -26,6 +26,13 @@ class MissingWordsQuestion implements Question
     private array $missingWords;
 
     /**
+     * Number of found words.
+     *
+     * @var integer
+     */
+    private int $nbFoundWords;
+
+    /**
      * Constructor.
      *
      * @param integer|null $seed Seed used to generate the question.
@@ -36,6 +43,7 @@ class MissingWordsQuestion implements Question
 
         $this->verse = Verse::random();
         $this->missingWords = [];
+        $this->nbFoundWords = 0;
 
         $this->initMissingWords();
     }
@@ -54,16 +62,20 @@ class MissingWordsQuestion implements Question
             return false;
         }
 
-        $nbFoundWords = 0;
+        $this->nbFoundWords = 0;
         for ($i = 0; $i < sizeof($this->missingWords); $i++) {
-            if (!isset($answer[$i]) || !$this->missingWords[$i]->isSimilarTo($answer[$i])) {
+            if (!array_key_exists($i, $answer)) {
                 break;
             }
-            $nbFoundWords++;
+            
+            if (!$this->missingWords[$i]->isSimilarTo($answer[$i])) {
+                break;
+            }
+            
+            $this->nbFoundWords++;
         }
 
-        $this->missingWords = array_splice($this->missingWords, $nbFoundWords);
-        return empty($this->missingWords);
+        return $this->nbFoundWords >= sizeof($this->missingWords);
     }
 
     /**
@@ -77,8 +89,9 @@ class MissingWordsQuestion implements Question
             return $word->index();
         }, $this->missingWords);
 
-        $fragments   = [];
-        $currentText = '';
+        $fragments      = [];
+        $currentText    = '';
+        $missingWordIdx = 0;
 
         for ($i = 0; $i < sizeof($this->verse->words()); $i++) {
             $word = $this->verse->words()[$i];
@@ -91,7 +104,7 @@ class MissingWordsQuestion implements Question
 
             if ($currentText) {
                 array_push($fragments, [
-                    "type" => "fragment",
+                    "type" => "text",
                     "text" => $currentText
                 ]);
                 $currentText = '';
@@ -99,13 +112,14 @@ class MissingWordsQuestion implements Question
 
             array_push($fragments, [
                 "type"   => "word",
+                "text"   => ++$missingWordIdx <= $this->nbFoundWords ? $word->string() : null,
                 "length" => $word->length()
             ]);
         }
 
         if ($currentText) {
             array_push($fragments, [
-                "type" => "fragment",
+                "type" => "text",
                 "text" => $currentText
             ]);
         }
