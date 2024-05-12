@@ -27,7 +27,7 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $token  = $request->getParsedBody()['token']  ?? null;
         $answer = $request->getParsedBody()['answer'] ?? null;
 
-        if (!$token || !$answer) {
+        if ($token === null || $answer === null) {
             return $response->withStatus(400);
         }
 
@@ -37,7 +37,12 @@ $app->group('/api', function (RouteCollectorProxy $group) {
     });
 
     $group->post('/game/next', function (Request $request, Response $response) {
-        $game = new Game($request->getParsedBody()['token']);
+        $token  = $request->getParsedBody()['token'] ?? null;
+        if ($token === null) {
+            return $response->withStatus(400);
+        }
+
+        $game = new Game($token);
         $game->next();
         return $response->withJson($game);
     });
