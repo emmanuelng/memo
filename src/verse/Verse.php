@@ -11,6 +11,34 @@ use JsonSerializable;
 class Verse implements JsonSerializable
 {
     /**
+     * Returns a random verse.
+     *
+     * @return Verse A verse.
+     */
+    public static function random(): Verse
+    {
+        $list = Verse::loadAll();
+        return $list[random_int(0, sizeof($list) - 1)];
+    }
+
+    /**
+     * Loads all the verses from the JSON file.
+     *
+     * @return array List of verses.
+     */
+    public static function loadAll(): array
+    {
+        $verses = json_decode(file_get_contents(__DIR__ . '/../../verses.json'));
+        $verseObjArr = [];
+
+        foreach ($verses as $verse) {
+            array_push($verseObjArr, Verse::jsonDeserialize($verse));
+        }
+
+        return $verseObjArr;
+    }
+
+    /**
      * Builds a verse with JSON data.
      *
      * @param mixed $data The data.
