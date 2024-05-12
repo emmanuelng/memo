@@ -59,12 +59,18 @@ class State
      */
     public function encodeToken(): string
     {
-        return json_encode([
-            "seed" => $this->seed,
-            "questionNumber" => $this->questionNumber,
-            "streak" => $this->streak,
-            "questionIsAnswered" => $this->questionIsAnswered
-        ]);
+        return openssl_encrypt(
+            json_encode([
+                "seed" => $this->seed,
+                "questionNumber" => $this->questionNumber,
+                "streak" => $this->streak,
+                "questionIsAnswered" => $this->questionIsAnswered
+            ]),
+            "AES-128-CTR",
+            $_ENV['MEMO_GAME_STATE_TOKEN_SECRET'],
+            0,
+            $_ENV['MEMO_GAME_STATE_TOKEN_IV']
+        );
     }
 
     /**
@@ -76,7 +82,14 @@ class State
     private static function decodeToken(string $token): array
     {
         try {
-            $data = json_decode($token, true);
+            $data = json_decode(openssl_decrypt(
+                $token,
+                "AES-128-CTR",
+                $_ENV['MEMO_GAME_STATE_TOKEN_SECRET'],
+                0,
+                $_ENV['MEMO_GAME_STATE_TOKEN_IV']
+            ), true);
+
             return [
                 "seed" => State::decodeField($data, 'seed'),
                 "questionNumber" => State::decodeField($data, 'questionNumber'),
