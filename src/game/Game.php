@@ -65,13 +65,13 @@ class Game implements JsonSerializable
         ];
 
         srand($this->state->getSeed());
-
+        
         $index = 0;
         $seed  = 0;
-
+        
         for ($i = 0; $i < $this->state->getQuestionNumber(); $i++) {
-            $index = random_int(0, sizeof($questions) - 1);
-            $seed  = random_int(0, 4294967296);
+            $index = rand(0, sizeof($questions) - 1);
+            $seed  = rand(0, 4294967296);
         }
 
         $this->question = $questions[$index]($seed);

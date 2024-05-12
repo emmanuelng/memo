@@ -18,7 +18,7 @@ class Verse implements JsonSerializable
     public static function random(): Verse
     {
         $list = Verse::loadAll();
-        return $list[random_int(0, sizeof($list) - 1)];
+        return $list[rand(0, sizeof($list) - 1)];
     }
 
     /**
@@ -95,5 +95,25 @@ class Verse implements JsonSerializable
             "reference" => $this->reference,
             "topic" => $this->topic
         ];
+    }
+
+    /**
+     * Returns the reference of the verse.
+     *
+     * @return Reference The reference.
+     */
+    public function reference(): Reference
+    {
+        return $this->reference;
+    }
+
+    /**
+     * Returns the words of the verse.
+     *
+     * @return array An array of Word objects.
+     */
+    function words(): array
+    {
+        return $this->text->words();
     }
 }
