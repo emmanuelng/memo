@@ -81,22 +81,21 @@ class Game implements JsonSerializable
     /**
      * Moves to the next question.
      *
-     * @return Game This game.
+     * @return void
      */
-    public function next(): Game
+    public function next(): void
     {
         $this->state->incrementQuestionNumber();
         $this->question = null;
-        return $this;
     }
 
     /**
      * Submits an answer for the current question.
      *
      * @param mixed $answer The answer.
-     * @return Game This game.
+     * @return void
      */
-    public function submitAnswer(mixed $answer): Game
+    public function submitAnswer($answer): void
     {
         $isCorrect = $this->getQuestion()->submitAnswer($answer);
         $this->state->setQuestionIsAnswered($isCorrect);
@@ -106,7 +105,5 @@ class Game implements JsonSerializable
         } else {
             $this->state->resetStreak();
         }
-
-        return $this;
     }
 }
