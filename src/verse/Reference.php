@@ -57,20 +57,20 @@ class Reference implements JsonSerializable
         // Simple reference: e.g. "1 Peter 5:7"
         $pattern = '/^(?<book>[1-9]* *.+) +(?<firstChapter>[0-9]+) *: *(?<firstVerse>[0-9]+)$/';
         if (preg_match($pattern, $refString, $matches)) {
-            $this->book = $matches['book'];
+            $this->book         = $matches['book'];
             $this->firstChapter = $matches['firstChapter'];
-            $this->firstVerse = $matches['firstVerse'];
+            $this->firstVerse   = $matches['firstVerse'];
             return;
         }
 
         // Range reference: e.g. "Proverbs 4:5-6"
         $pattern = '/(?<book>[1-9]* *.+) +(?<chapter>[0-9]+):(?<firstVerse>[0-9]+)-(?<lastVerse>[0-9]+)/';
         if (preg_match($pattern, $refString, $matches)) {
-            $this->book = $matches['book'];
+            $this->book         = $matches['book'];
             $this->firstChapter = $matches['chapter'];
-            $this->firstVerse = $matches['firstVerse'];            
-            $this->lastChapter = $matches['chapter'];
-            $this->lastVerse = $matches['lastVerse'];
+            $this->firstVerse   = $matches['firstVerse'];
+            $this->lastChapter  = $matches['chapter'];
+            $this->lastVerse    = $matches['lastVerse'];
             return;
         }
 
