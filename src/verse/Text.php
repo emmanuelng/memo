@@ -93,7 +93,9 @@ class Text implements JsonSerializable
             $nextChar === ' ' ||
             $nextChar === ',' ||
             $nextChar === ';' ||
-            $nextChar === '.'
+            $nextChar === '.' ||
+            $nextChar === '!' ||
+            $nextChar === '?'  
         );
     }
 }
