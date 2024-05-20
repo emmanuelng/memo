@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import MissingWordsQuestion from "./questions/MissingWordsQuestion";
+import { ReactComponent as HomeLogo } from './home.svg';
+import { ReactComponent as Logo } from '../logo.svg';
+
+import './Game.scss';
 
 const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
+
+    const SERVER_URL = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? 'http://localhost/memo/' : '';
 
     const [token, setToken] = useState<string>('');
     const [streak, setStreak] = useState<number>(0);
@@ -26,7 +32,7 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
     };
 
     const onStartGame = () => {
-        fetch(`api/game/start`, {
+        fetch(`${SERVER_URL}api/game/start`, {
             method: 'POST'
         }).then(response => {
             response.json().then(json => { setState(json); });
@@ -41,8 +47,8 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
     const onAnswerChanged = () => {
         if (answer === null)
             return;
-        
-        fetch(`api/game/answer`, {
+
+        fetch(`${SERVER_URL}api/game/answer`, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ token, answer })
@@ -52,7 +58,7 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
     };
 
     const onNextQuestion = () => {
-        fetch(`api/game/next`, {
+        fetch(`${SERVER_URL}api/game/next`, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ token })
@@ -72,8 +78,14 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
 
     return (
         <>
-            <h1>Game</h1>
-            <button onClick={props.onEndGame}>Retour au menu</button>
+            <div id="Header">
+                <div id="HomeButton" >
+                    <button onClick={props.onEndGame}><HomeLogo /></button>
+                </div>
+                <div id="Logo">
+                    <Logo />
+                </div>
+            </div>
             <div>{getQuestion()}</div>
             <button onClick={onNextQuestion}>Passer</button>
             <div>Série en cours: {streak}</div>

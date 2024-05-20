@@ -27,7 +27,9 @@ function App(): JSX.Element {
 
     return (
         <div className="App">
-            {getScreen()}
+            <div className='container'>
+                {getScreen()}
+            </div>
         </div>
     );
 }

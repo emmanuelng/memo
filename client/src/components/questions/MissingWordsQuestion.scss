@@ -1,0 +1,25 @@
+#Title {
+    margin: 20px 0;
+
+    h2, p {
+        margin: 0;
+    }
+}
+
+#Verse {
+    border: solid 1px #111;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: left;
+
+    #Reference {
+        font-weight: bold;
+        font-size: 90%;
+        margin-top: 15px;
+        text-align: right;
+    }
+}
+
+#Answer {
+    margin: 30px 0;
+}

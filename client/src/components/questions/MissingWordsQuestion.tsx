@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import './MissingWordsQuestion.scss';
+
 const MissingWordsQuestion: React.FC<{
     data: any;
     setAnswer: (answer: any) => void;
@@ -71,18 +73,24 @@ const MissingWordsQuestion: React.FC<{
 
     return (
         <>
-            <h2>Mots manquants</h2>
-            <p>Trouvez les mots manquants dans ce verset.</p>
-            <div>
-                <div>{getVerseFragments()}</div>
-                <div>{getVerseReference()}</div>
+            <div id="Title">
+                <h2>Mots manquants</h2>
+                <p>Trouvez les mots manquants dans ce verset.</p>
             </div>
-            <div>
+            <div id="Verse">
+                <div id="Text">{getVerseFragments()}</div>
+                <div id="Reference">{getVerseReference()}</div>
+            </div>
+            <div id="Answer">
                 <input type="text"
                     value={word}
+                    placeholder="Tapez un mot..."
                     onChange={e => setWord(e.target.value)}
                     autoFocus
                 />
+                <div>
+                    <small>Tapez le <strong>premier</strong> mot manquant du verset</small>
+                </div>
             </div>
         </>
     );

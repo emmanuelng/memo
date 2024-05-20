@@ -1,8 +1,38 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Teachers:ital,wght@0,400..800;1,400..800&display=swap');
+
+$accent-color: #ffe680ff;
+
+html {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+
+  body {
+    background: #212121;
+    font-family: "Teachers", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: 20px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    button {
+      background: $accent-color;
+      border: solid 2px #111;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: inherit;
+      padding: 10px 40px;
+
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    input[type=text] {
+      border: solid 2px #111;
+      border-radius: 5px;
+      font-family: inherit;
+      font-size: inherit;
+      padding: 8px 5px;
+    }
+  }
 }
