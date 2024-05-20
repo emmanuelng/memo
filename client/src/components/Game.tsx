@@ -26,7 +26,7 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
     };
 
     const onStartGame = () => {
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/game/start`, {
+        fetch(`api/game/start`, {
             method: 'POST'
         }).then(response => {
             response.json().then(json => { setState(json); });
@@ -42,7 +42,7 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
         if (answer === null)
             return;
         
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/game/answer`, {
+        fetch(`api/game/answer`, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ token, answer })
@@ -52,7 +52,7 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
     };
 
     const onNextQuestion = () => {
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/game/next`, {
+        fetch(`api/game/next`, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ token })
