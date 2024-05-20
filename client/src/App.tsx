@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Menu from './components/Menu';
 import Game from './components/Game';
 
-import './App.css';
+import './App.scss';
 
 function App(): JSX.Element {
     const [screen, setScreen] = useState<"menu" | "game">("menu");
