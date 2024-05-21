@@ -139,30 +139,10 @@ class State
     public function incrementQuestionNumber(): void
     {
         $this->questionNumber++;
+        $this->streak = $this->questionIsAnswered ? $this->streak : 0;
         $this->questionIsAnswered = false;
-        $this->resetStreak();
     }
-
-    /**
-     * Increments the player's streak.
-     *
-     * @return void
-     */
-    public function incrementStreak(): void
-    {
-        $this->streak++;
-    }
-
-    /**
-     * Resets the player's streak.
-     *
-     * @return void
-     */
-    public function resetStreak(): void
-    {
-        $this->streak = 0;
-    }
-
+    
     /**
      * Indicates if the current question is answered.
      *
@@ -182,6 +162,7 @@ class State
     public function setQuestionIsAnswered(bool $isAnswered): void
     {
         $this->questionIsAnswered = $isAnswered;
+        $this->streak = $isAnswered ? $this->streak + 1 : $this->streak;
     }
 
     /**

@@ -97,13 +97,8 @@ class Game implements JsonSerializable
      */
     public function submitAnswer($answer): void
     {
-        $isCorrect = $this->getQuestion()->submitAnswer($answer);
-        $this->state->setQuestionIsAnswered($isCorrect);
-
-        if ($isCorrect) {
-            $this->state->incrementStreak();
-        } else {
-            $this->state->resetStreak();
-        }
+        if ($this->getQuestion()->submitAnswer($answer)) {
+            $this->state->setQuestionIsAnswered(true);
+        } 
     }
 }
