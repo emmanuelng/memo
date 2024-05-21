@@ -83,7 +83,7 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
                     <button onClick={props.onEndGame}><HomeLogo /></button>
                 </div>
                 <div id="Logo">
-                    <Logo />
+                    <Logo onClick={props.onEndGame} />
                 </div>
             </div>
             <div>{getQuestion()}</div>
