@@ -2,8 +2,10 @@
 
 namespace Memo\Game;
 
+use Error;
 use JsonSerializable;
 use Memo\Game\Questions\MissingWordsQuestion;
+use Memo\Game\Questions\ReferenceMultipleChoice;
 use ReflectionClass;
 
 /**
@@ -43,6 +45,7 @@ class Game implements JsonSerializable
             'questionType' => (new ReflectionClass($this->getQuestion()))->getShortName(),
             'isCorrect' => $this->state->questionIsAnswered(),
             'streak' => $this->state->getStreak(),
+            'canAnswer' => $this->canAnswer(),
             'question' => $this->getQuestion()
         ];
     }
@@ -62,13 +65,16 @@ class Game implements JsonSerializable
             function (int $seed): Question {
                 return new MissingWordsQuestion($seed);
             },
+            function (int $seed): Question {
+                return new ReferenceMultipleChoice($seed);
+            }
         ];
 
         srand($this->state->getSeed());
-        
+
         $index = 0;
         $seed  = 0;
-        
+
         for ($i = 0; $i < $this->state->getQuestionNumber(); $i++) {
             $index = rand(0, sizeof($questions) - 1);
             $seed  = rand(0, 4294967296);
@@ -90,6 +96,25 @@ class Game implements JsonSerializable
     }
 
     /**
+     * Checks if the player can still answer to the current question.
+     *
+     * @return boolean True if the player can answer, false otherwise.
+     */
+    private function canAnswer(): bool
+    {
+        $question = $this->getQuestion();
+        if ($question == null) {
+            return false;
+        }
+
+        $maxAttempts = $question->maxAnswerAttempts();
+        if ($maxAttempts == null)
+            return true;
+
+        return $this->state->getAttempts() < $maxAttempts;
+    }
+
+    /**
      * Submits an answer for the current question.
      *
      * @param mixed $answer The answer.
@@ -97,8 +122,20 @@ class Game implements JsonSerializable
      */
     public function submitAnswer($answer): void
     {
-        if ($this->getQuestion()->submitAnswer($answer)) {
+        $question = $this->getQuestion();
+        if ($question == null) {
+            return;
+        }
+
+        $maxAttempts = $question->maxAnswerAttempts();
+        if ($maxAttempts != null && $this->state->getAttempts() >= $maxAttempts) {
+            throw new Error("Too many answers.", 400);
+        }
+
+        $this->state->incrementAttempts();
+
+        if ($question->submitAnswer($answer)) {
             $this->state->setQuestionIsAnswered(true);
-        } 
+        }
     }
 }

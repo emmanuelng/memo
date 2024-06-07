@@ -108,6 +108,16 @@ class Verse implements JsonSerializable
     }
 
     /**
+     * Returns the text of the verse.
+     *
+     * @return Text The text.
+     */
+    public function text(): Text
+    {
+        return $this->text;
+    }
+
+    /**
      * Returns the words of the verse.
      *
      * @return array An array of Word objects.

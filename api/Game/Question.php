@@ -16,4 +16,11 @@ interface Question extends JsonSerializable
      * @return boolean True if the answer is correct, false otherwise.
      */
     public function submitAnswer(mixed $answer): bool;
+
+    /**
+     * Returns the maximum number of answers that can be submitted.
+     *
+     * @return integer|null The number of attempts. Null if it is unlimited.
+     */
+    public function maxAnswerAttempts(): ?int;
 }

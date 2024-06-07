@@ -67,11 +67,11 @@ class MissingWordsQuestion implements Question
             if (!array_key_exists($i, $answer)) {
                 break;
             }
-            
+
             if (!$this->missingWords[$i]->isSimilarTo($answer[$i])) {
                 break;
             }
-            
+
             $this->nbFoundWords++;
         }
 
@@ -159,5 +159,10 @@ class MissingWordsQuestion implements Question
     public static function isWordRemovable(Word $word): bool
     {
         return $word->length() > 4;
+    }
+
+    public function maxAnswerAttempts(): ?int
+    {
+        return null;
     }
 }

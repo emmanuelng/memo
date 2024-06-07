@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import MissingWordsQuestion from "./questions/MissingWordsQuestion";
 import { ReactComponent as HomeLogo } from './home.svg';
 import { ReactComponent as Logo } from '../logo.svg';
+import Question from "./questions/Question";
 
 import './Game.scss';
 
@@ -14,6 +14,7 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
     const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean>(false);
     const [questionType, setQuestionType] = useState<string>('');
     const [question, setQuestion] = useState<any | null>(null);
+    const [canAnswer, setCanAnswer] = useState<boolean>(true);
     const [answer, setAnswer] = useState<any | null>(null);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -22,13 +23,17 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
     useEffect(() => onAnswerChanged(), [answer]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => onIsCorrectChanged(), [isAnswerCorrect]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => onCanAnswerChanged(), [canAnswer]);
 
     const setState = (json: any) => {
         setToken(json.token);
         setIsAnswerCorrect(json.isCorrect === true);
         setStreak(json.streak);
         setQuestionType(json.questionType);
+        setCanAnswer(json.canAnswer);
         setQuestion(json.question);
+        setAnswer(null);
     };
 
     const onStartGame = () => {
@@ -41,7 +46,13 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
 
     const onIsCorrectChanged = () => {
         if (isAnswerCorrect)
-            setTimeout(onNextQuestion, 500);
+            setTimeout(onNextQuestion, 1000);
+    };
+
+    const onCanAnswerChanged = () => {
+        if (!canAnswer) {
+            setTimeout(onNextQuestion, 1000);
+        }
     };
 
     const onAnswerChanged = () => {
@@ -67,15 +78,6 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
         });
     };
 
-    const getQuestion = () => {
-        switch (questionType) {
-            case "MissingWordsQuestion":
-                return <MissingWordsQuestion data={question} setAnswer={setAnswer} />;
-            default:
-                return <></>;
-        }
-    };
-
     return (
         <>
             <div id="Header">
@@ -86,9 +88,13 @@ const Game: React.FC<{ onEndGame: () => void; }> = (props) => {
                     <Logo onClick={props.onEndGame} />
                 </div>
             </div>
-            <div>{getQuestion()}</div>
-            <button onClick={onNextQuestion}>Passer</button>
-            <div>Série en cours: {streak}</div>
+            <div id="Question">
+                <Question type={questionType} data={question} setAnswer={setAnswer} />
+            </div>
+            <div id="Footer">
+                <button onClick={onNextQuestion}>Passer</button>
+                <div>Série en cours: {streak}</div>
+            </div>
         </>
     );
 };

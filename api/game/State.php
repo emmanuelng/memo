@@ -31,6 +31,13 @@ class State
     private int $streak;
 
     /**
+     * Number of answer attempts for the current question.
+     *
+     * @var integer
+     */
+    private int $attempts;
+
+    /**
      * Indicates if the current question is answered. 
      *
      * @var boolean
@@ -49,6 +56,7 @@ class State
         $this->seed = $data ? $data['seed'] : random_int(0, 4294967296);
         $this->questionNumber = $data ? $data['questionNumber'] : 1;
         $this->streak = $data ? $data['streak'] : 0;
+        $this->attempts = $data ? $data['attempts'] : 0;
         $this->questionIsAnswered = $data ? $data['questionIsAnswered'] : false;
     }
 
@@ -64,6 +72,7 @@ class State
                 "seed" => $this->seed,
                 "questionNumber" => $this->questionNumber,
                 "streak" => $this->streak,
+                "attempts" => $this->attempts,
                 "questionIsAnswered" => $this->questionIsAnswered
             ]),
             "AES-128-CTR",
@@ -94,6 +103,7 @@ class State
                 "seed" => State::decodeField($data, 'seed'),
                 "questionNumber" => State::decodeField($data, 'questionNumber'),
                 "streak" => State::decodeField($data, 'streak'),
+                "attempts" => State::decodeField($data, 'attempts'),
                 "questionIsAnswered" => State::decodeField($data, 'questionIsAnswered')
             ];
         } catch (Error $e) {
@@ -132,6 +142,26 @@ class State
     }
 
     /**
+     * Returns the number of answer attempts for the current question.
+     *
+     * @return integer Attempts value.
+     */
+    public function getAttempts(): int
+    {
+        return $this->attempts;
+    }
+
+    /**
+     * Increments the number of answer attempts for the current question.
+     *
+     * @return void
+     */
+    public function incrementAttempts(): void
+    {
+        $this->attempts++;
+    }
+
+    /**
      * Incerments the question number.
      *
      * @return void
@@ -140,9 +170,10 @@ class State
     {
         $this->questionNumber++;
         $this->streak = $this->questionIsAnswered ? $this->streak : 0;
+        $this->attempts = 0;
         $this->questionIsAnswered = false;
     }
-    
+
     /**
      * Indicates if the current question is answered.
      *

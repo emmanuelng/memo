@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import './MissingWordsQuestion.scss';
+import Reference from "../commons/Reference";
 
 const MissingWordsQuestion: React.FC<{
     data: any;
@@ -79,7 +80,7 @@ const MissingWordsQuestion: React.FC<{
             </div>
             <div id="Verse">
                 <div id="Text">{getVerseFragments()}</div>
-                <div id="Reference">{getVerseReference()}</div>
+                <div id="Reference"><Reference data={props.data.reference}/></div>
             </div>
             <div id="Answer">
                 <input type="text"
