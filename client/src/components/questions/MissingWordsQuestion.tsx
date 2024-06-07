@@ -50,28 +50,6 @@ const MissingWordsQuestion: React.FC<{
         );
     };
 
-    const getVerseReference = () => {
-        const book: string = props.data.reference.book;
-        const firstVerse: any = props.data.reference.firstVerse;
-        const lastVerse: any | null = props.data.reference.lastVerse;
-
-        let referenceStr = `${book} `;
-
-        if (!lastVerse) {
-            referenceStr += `${firstVerse.chapter} : ${firstVerse.verse}`;
-        } else if (firstVerse.chapter === lastVerse.chapter) {
-            referenceStr += firstVerse.verse === lastVerse.verse
-                ? `${firstVerse.chapter} : ${firstVerse.verse}`
-                : `${firstVerse.chapter} : ${firstVerse.verse}-${lastVerse.verse}`;
-        } else {
-            referenceStr += `${firstVerse.chapter} : ${firstVerse.verse}`;
-            referenceStr += ' - ';
-            referenceStr += `${lastVerse.chapter} : ${lastVerse.verse}`;
-        }
-
-        return <span>{referenceStr}</span>;
-    };
-
     return (
         <>
             <div id="Title">
