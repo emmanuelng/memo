@@ -37,11 +37,11 @@ class MissingWordsQuestion implements Question
      *
      * @param integer|null $seed Seed used to generate the question.
      */
-    function __construct(?int $seed = null)
+    function __construct(Verse $verse, ?int $seed = null)
     {
         srand($seed);
 
-        $this->verse = Verse::random();
+        $this->verse = $verse;
         $this->missingWords = [];
         $this->nbFoundWords = 0;
 

@@ -2,6 +2,7 @@
 
 use Dotenv\Dotenv;
 use Memo\Game\Game;
+use Memo\Game\Settings;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Factory\AppFactory;
@@ -29,7 +30,8 @@ $app->add(function ($request, $handler) {
 });
 
 $app->post('/game/start', function (Request $request, Response $response) {
-    return $response->withJson(new Game());
+    $settings = new Settings($request->getParsedBody() ?? null);
+    return $response->withJson(Game::create($settings));
 });
 
 $app->post('/game/answer', function (Request $request, Response $response) {
@@ -40,7 +42,7 @@ $app->post('/game/answer', function (Request $request, Response $response) {
         return $response->withStatus(400);
     }
 
-    $game = new Game($token);
+    $game = Game::recover($token);
     $game->submitAnswer($answer);
     return $response->withJson($game);
 });
@@ -51,14 +53,9 @@ $app->post('/game/next', function (Request $request, Response $response) {
         return $response->withStatus(400);
     }
 
-    $game = new Game($token);
+    $game = Game::recover($token);
     $game->next();
     return $response->withJson($game);
-});
-
-$app->get('/', function (Request $request, Response $response) {
-    $response->write('Hello world!');
-    return $response;
 });
 
 /**

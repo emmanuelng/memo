@@ -11,31 +11,58 @@ use JsonSerializable;
 class Verse implements JsonSerializable
 {
     /**
+     * List of all verses.
+     *
+     * @var array|null
+     */
+    private static ?array $all = null;
+
+    /**
      * Returns a random verse.
      *
      * @return Verse A verse.
      */
     public static function random(): Verse
     {
-        $list = Verse::loadAll();
-        return $list[rand(0, sizeof($list) - 1)];
+        $all = Verse::all();
+        return $all[rand(0, sizeof($all) - 1)];
     }
 
     /**
-     * Loads all the verses from the JSON file.
+     * Returns the list of all verse topics.
      *
-     * @return array List of verses.
+     * @return array A list of strings.
      */
-    public static function loadAll(): array
+    public static function topics(): array
     {
-        $verses = json_decode(file_get_contents(__DIR__ . '/../../verses.json'));
-        $verseObjArr = [];
+        $topics = [];
 
-        foreach ($verses as $verse) {
-            array_push($verseObjArr, Verse::jsonDeserialize($verse));
+        foreach (Verse::all() as $verse) {
+            if (!in_array($verse->topic, $topics)) {
+                array_push($topics, $verse->topic);
+            }
         }
 
-        return $verseObjArr;
+        return $topics;
+    }
+
+    /**
+     * Returns the list of all verses.
+     * 
+     * @return array List of verses.
+     */
+    public static function all(): array
+    {
+        if (Verse::$all === null) {
+            $verses = json_decode(file_get_contents(__DIR__ . '/../../verses.json'));
+            Verse::$all = [];
+
+            foreach ($verses as $verse) {
+                array_push(Verse::$all, Verse::jsonDeserialize($verse));
+            }
+        }
+
+        return Verse::$all;
     }
 
     /**
@@ -115,6 +142,15 @@ class Verse implements JsonSerializable
     public function text(): Text
     {
         return $this->text;
+    }
+
+    /**
+     * Returns the topic of the verse.
+     *
+     * @return string The topic.
+     */
+    public function topic(): string {
+        return $this->topic;
     }
 
     /**

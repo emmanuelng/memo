@@ -17,6 +17,13 @@ class State
     private int $seed;
 
     /**
+     * The settings of the game.
+     *
+     * @var Settings
+     */
+    private Settings $settings;
+
+    /**
      * Current question number.
      *
      * @var integer
@@ -53,11 +60,12 @@ class State
     {
         $data = $token ? State::decodeToken($token) : null;
 
-        $this->seed = $data ? $data['seed'] : random_int(0, 4294967296);
-        $this->questionNumber = $data ? $data['questionNumber'] : 1;
-        $this->streak = $data ? $data['streak'] : 0;
-        $this->attempts = $data ? $data['attempts'] : 0;
-        $this->questionIsAnswered = $data ? $data['questionIsAnswered'] : false;
+        $this->seed = $data['seed'] ?? random_int(0, 4294967296);
+        $this->settings = new Settings($data['settings'] ?? null);
+        $this->questionNumber = $data['questionNumber'] ?? 1;
+        $this->streak = $data['streak'] ?? 0;
+        $this->attempts = $data['attempts'] ?? 0;
+        $this->questionIsAnswered = $data['questionIsAnswered'] ?? false;
     }
 
     /**
@@ -70,6 +78,7 @@ class State
         return openssl_encrypt(
             json_encode([
                 "seed" => $this->seed,
+                "settings" => $this->settings,
                 "questionNumber" => $this->questionNumber,
                 "streak" => $this->streak,
                 "attempts" => $this->attempts,
@@ -101,6 +110,7 @@ class State
 
             return [
                 "seed" => State::decodeField($data, 'seed'),
+                "settings" => State::decodeField($data, 'settings'),
                 "questionNumber" => State::decodeField($data, 'questionNumber'),
                 "streak" => State::decodeField($data, 'streak'),
                 "attempts" => State::decodeField($data, 'attempts'),
@@ -129,6 +139,16 @@ class State
     public function getQuestionNumber(): int
     {
         return $this->questionNumber;
+    }
+
+    /**
+     * Returns the game settings.
+     *
+     * @return Settings The settings.
+     */
+    public function getSettings(): Settings
+    {
+        return $this->settings;
     }
 
     /**
@@ -194,6 +214,17 @@ class State
     {
         $this->questionIsAnswered = $isAnswered;
         $this->streak = $isAnswered ? $this->streak + 1 : $this->streak;
+    }
+
+    /**
+     * Sets the settings of the game.
+     *
+     * @param Settings|null $settings The settings. If null, uses the default settings.
+     * @return void
+     */
+    public function setSettings(?Settings $settings): void
+    {
+        $this->settings = $settings === null ? new Settings() : $settings;
     }
 
     /**
